@@ -190,7 +190,7 @@ sed -i 's+/root/wait.sh+/home/nm-admin/wait.sh+g' docker-compose.yml
 
 ### Insert the version number
 
-The downloaded 'docker-compose.yml' contains some references to the Netmaker version. At the time of writing of this document, the current version of Netmaker is v0.18.5. We can find the current latest release in the [https://github.com/gravitl/netmaker/releases](official Netmaker Github repository). In the next step, this version number is needed to insert the relevant version in our 'docker-compose.yml' file
+The downloaded 'docker-compose.yml' contains some references to the Netmaker version. At the time of writing of this document, the current version of Netmaker is v0.18.5. We can find the current latest release in the [official Netmaker Github repository](https://github.com/gravitl/netmaker/releases). In the next step, this version number is needed to insert the relevant version in our 'docker-compose.yml' file
 
 ```bash
 sed -i 's+REPLACE_SERVER_IMAGE_TAG+v0.18.5+g' docker-compose.yml
@@ -201,7 +201,7 @@ sed -i 's+REPLACE_UI_IMAGE_TAG+v0.18.5+g' docker-compose.yml
 
 ### Take care of some last bits and pieces
 
-The last four lines follow similar steps as explained in the [https://docs.netmaker.org/quick-start.html](Quick start guide of the Netmaker docs).
+The last four lines follow similar steps as explained in the [Quick start guide of the Netmaker docs](https://docs.netmaker.org/quick-start.html).
 
 :memo: Although the exact same information needs to be feeded into the sed commands, please be aware that the lines below are slightly modified to reference the correct path-to-file
 
