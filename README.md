@@ -22,7 +22,8 @@ The cloud provider offers cloud-init at server initialisation. I'm using this op
 
 <u>Mind:</u> The rest of this document relies heavily on the initial setup. If no cloud-init is used, it will be up to the user to install packages and prepare the sudo user in advance.
 
-`#cloud-config
+```
+#cloud-config
 packages:
   - nano
   - git
@@ -40,7 +41,8 @@ runcmd:
   - sed -i -e '/^PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config
   - sed -i -e '/^PasswordAuthentication/s/^.*$/PasswordAuthentication no/' /etc/ssh/sshd_config
   - sed -i -e '$aAllowUsers nm-admin' /etc/ssh/sshd_config
-  - restart ssh`
+  - restart ssh
+```
   
   The linux user "nm-admin" will be used also in the second part of this document.
   
