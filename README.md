@@ -22,7 +22,7 @@ The cloud provider offers cloud-init at server initialisation. I'm using this op
 
 <u>Mind:</u> The rest of this document relies heavily on the initial setup. If no cloud-init is used, it will be up to the user to install packages and prepare the sudo user in advance.
 
-```
+```yaml
 #cloud-config
 packages:
   - nano
