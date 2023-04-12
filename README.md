@@ -4,12 +4,14 @@ In this document, I describe a working setup of a Netmaker instance on Alma 9 Li
 
 ## VPS Specs
 
-**Provider:** IONOS
-**Subscription:** "Virtual Server Cloud S"
-**CPU:** 1 vCore
-**RAM:** 512 MB
-**SSD:** 10 GB
-**Console Type:** KVM
+| Description | Details |
+| :--- | :--- |
+| Provider | IONOS |
+| Subscription | "Virtual Server Cloud S" |
+| CPU | 1 vCore |
+| RAM | 512 MB |
+| SSD | 10 GB |
+| Console Type | KVM |
 
 ## Cloud-init
 
