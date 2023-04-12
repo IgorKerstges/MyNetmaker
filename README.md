@@ -124,7 +124,7 @@ docker version
 
 ## Step 3: Install Docker Compose
 
-At the time of writing of this document, the current version of docker-compose is v2.17.2. We can find the current latest release in the [https://github.com/docker/compose/releases](official docker Github repository). In the next step, this version number is needed to construct the path to the download location for our curl command.
+At the time of writing of this document, the current version of docker-compose is v2.17.2. We can find the current latest release in the [https://github.com/docker/compose/releases](docker Github repository). In the next step, this version number is needed to construct the path to the download location for our curl command.
 
 ```bash
 sudo curl -L "https://github.com/docker/compose/releases/download/v2.17.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
