@@ -112,7 +112,7 @@ sudo systemctl start docker
 With docker installed, we make sure that our user can run it
 
 ```bash
-sudo usermod -a -G docker igor
+sudo usermod -a -G docker nm-admin
 newgrp docker
 ```
 
@@ -139,6 +139,7 @@ docker-compose version
 Wireguard is part of the kernel and we can activate it. After activating, we need to briefly step into the root account ('su') to make this change also load after reboot. As final step, we install the wireguard-tools, so we can configure it
 
 ```bash
+sudo modprobe wireguard
 su
 echo wireguard > /etc/modules-load.d/wireguard.conf
 exit
@@ -219,3 +220,25 @@ docker-compose up -d
 ```
 
 Good luck, cheers!
+
+----------
+
+## Addendum
+
+With this configuration, we land in an 'empty box'. When opening "https://dashboard.your.subdomain.com", no network exists and so no nodes are created. To get going, following steps are needed:
+
+Step 1- Create a network.
+Step 2- Generate enrollment keys for the network of step 1.
+Step 3- Open the details of the newly generated enrollment key, copy the whole line in 'Register Command' to clipboard.
+Step 4- Start a terminal session and login with sudo-user 'nm-admin'.
+Step 5- paste the 'Register Command' content with sudo, Example:
+
+```
+sudo netclient register -t eyJzZXJ2ZXIiOiJhcGkubmV0Lndvb2R3b3JrZXIubGlmZSIsInZhbHVlIjoieUtHeThpN0pwRkh1eVFGaklzSkxIOWk1bEhGMjJZd2QifQ==
+```
+
+Step 6- Back in the browser ("https://dashboard.your.subdomain.com"), you will now have a node connected.
+
+With these steps, other nodes can be added as needed. Either add other netclient nodes (repeating steps 3, 4 & 5 on the other machine) or use wireguard to connect.
+
+To add a Wireguard connection: In the browser, choose 'Ext. clients' (left side-menu) and from the dropdown, choose the network which was created in Step 1. Now we find the option to "Add External client" which can be done by click on the "+"-sign. This will create a Wireguard profile which shows in the 'Clients' section of the screen. Either use the QR-Code option to connect (especially easy for mobile devices) or download the .ovpn file to use for a Wireguard connection from laptop or pc.
