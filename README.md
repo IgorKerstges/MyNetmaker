@@ -52,7 +52,7 @@ The linux user "nm-admin" will be used also in the second part of this document.
 
 In this second part, we will take care of all the requirements to run the Netmaker server instance. Since Netmaker server will run in Docker, I want to make sure that we won't need the root user to login but we will make sure to add configurations to our user 'nm-admin' home directory and will take care that 'nm-admin' can run docker.
 
-:memo: Login with sudo-user account for all steps below!
+:memo: Login with sudo-user account ("nm-admin" in our example) for all steps below!
 
 ## Step 1: Configure firewall
 
@@ -150,10 +150,18 @@ sudo dnf install wireguard-tools -y
 
 Netmaker needs MQTT to communicate configuration changes between nodes. wget downloads the necessary files to our user's home directory
 
+We will collect any-and-all configfiles in a netmake location of our home directory, so let's create this first:
+
 ```bash
-sudo wget -O mosquitto.conf https://raw.githubusercontent.com/gravitl/netmaker/master/docker/mosquitto.conf
-sudo wget -q -O wait.sh https://raw.githubusercontent.com/gravitl/netmaker/master/docker/wait.sh
-sudo chmod +x wait.sh
+mkdir ~/.netmaker
+```
+
+With this, we can start downloading..
+
+```bash
+sudo wget -O ~/.netmaker/mosquitto.conf https://raw.githubusercontent.com/gravitl/netmaker/master/docker/mosquitto.conf
+sudo wget -q -O ~/.netmaker/wait.sh https://raw.githubusercontent.com/gravitl/netmaker/master/docker/wait.sh
+sudo chmod +x ~/.netmaker/wait.sh
 ```
 
 ## Step 6: Install Netclient
@@ -173,20 +181,20 @@ sudo dnf install netclient -y
 To install netmaker, we will download the relevant config files and modify them to our needs
 
 ```bash
-wget -O docker-compose.yml https://raw.githubusercontent.com/gravitl/netmaker/master/compose/docker-compose.yml
-wget -O Caddyfile https://raw.githubusercontent.com/gravitl/netmaker/master/docker/Caddyfile
+wget -O ~/.netmaker/docker-compose.yml https://raw.githubusercontent.com/gravitl/netmaker/master/compose/docker-compose.yml
+wget -O ~/.netmaker/Caddyfile https://raw.githubusercontent.com/gravitl/netmaker/master/docker/Caddyfile
 ```
 
-With the files 'docker-compose.yml' and 'Caddyfile' downloaded to our homedirectory, we need some modifications:
+With the files 'docker-compose.yml' and 'Caddyfile' downloaded to our netmaker config home-directory, we need some modifications:
 
 ### Modify references to root-directory
 
 The downloaded 'docker-compose.yml' contains some references to the '/root/' directory, but we need to change these to the home directory of our 'nm-admin' user
 
 ```bash
-sed -i 's+/root/Caddyfile+/home/nm-admin/Caddyfile+g' docker-compose.yml
-sed -i 's+/root/mosquitto.conf+/home/nm-admin/mosquitto.conf+g' docker-compose.yml
-sed -i 's+/root/wait.sh+/home/nm-admin/wait.sh+g' docker-compose.yml
+sed -i 's+/root/Caddyfile+~/.netmaker/Caddyfile+g' ~/.netmaker/docker-compose.yml
+sed -i 's+/root/mosquitto.conf+~/.netmaker/mosquitto.conf+g' ~/.netmaker/docker-compose.yml
+sed -i 's+/root/wait.sh+~/.netmaker/wait.sh+g' ~/.netmaker/docker-compose.yml
 ```
 
 ### Insert the version number
@@ -194,8 +202,8 @@ sed -i 's+/root/wait.sh+/home/nm-admin/wait.sh+g' docker-compose.yml
 The downloaded 'docker-compose.yml' contains some references to the Netmaker version. At the time of writing of this document, the current version of Netmaker is v0.18.5. We can find the current latest release in the [official Netmaker Github repository](https://github.com/gravitl/netmaker/releases). In the next step, this version number is needed to insert the relevant version in our 'docker-compose.yml' file
 
 ```bash
-sed -i 's+REPLACE_SERVER_IMAGE_TAG+v0.18.5+g' docker-compose.yml
-sed -i 's+REPLACE_UI_IMAGE_TAG+v0.18.5+g' docker-compose.yml
+sed -i 's+REPLACE_SERVER_IMAGE_TAG+v0.18.5+g' ~/.netmaker/docker-compose.yml
+sed -i 's+REPLACE_UI_IMAGE_TAG+v0.18.5+g' ~/.netmaker/docker-compose.yml
 ```
 
 :memo: The version number is part of both sed-commands
@@ -207,16 +215,16 @@ The last four lines follow similar steps as explained in the [Quick start guide 
 :memo: Although the exact same information needs to be feeded into the sed commands, please be aware that the lines below are slightly modified to reference the correct path-to-file
 
 ```bash
-sed -i 's/NETMAKER_BASE_DOMAIN/<your-subdomain-goes-here>/g' docker-compose.yml
-sed -i "s/NETMAKER_BASE_DOMAIN/<your-subdomain-goes-here>/g" Caddyfile
-sed -i 's/SERVER_PUBLIC_IP/<your-netmaker-server-ip-address-goes-here>/g' docker-compose.yml
-sed -i 's/YOUR_EMAIL/<your-email-address-goes-here>/g' Caddyfile
+sed -i 's/NETMAKER_BASE_DOMAIN/<your-subdomain-goes-here>/g' ~/.netmaker/docker-compose.yml
+sed -i "s/NETMAKER_BASE_DOMAIN/<your-subdomain-goes-here>/g" ~/.netmaker/Caddyfile
+sed -i 's/SERVER_PUBLIC_IP/<your-netmaker-server-ip-address-goes-here>/g' ~/.netmaker/docker-compose.yml
+sed -i 's/YOUR_EMAIL/<your-email-address-goes-here>/g' ~/.netmaker/Caddyfile
 ```
 
 :checkered_flag: With all the above, the server should be good to go:
 
 ```bash
-docker-compose up -d
+docker-compose -f ~/.netmaker/docker-compose.yml up -d
 ```
 
 Good luck, cheers!
